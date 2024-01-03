@@ -40,6 +40,13 @@ export default function App() {
       });
     });
   }
+  function deleteTodo(id) {
+    // Using the setTodos function to update the state of todos
+    setTodos((currentTodos) => {
+      // Filtering out the todo item with the provided id
+      return currentTodos.filter((todo) => todo.id !== id);
+    });
+  }
 
   // JSX code representing the structure of the component
   return (
@@ -84,7 +91,7 @@ export default function App() {
                 {todo.title}
               </label>
               {/* Button to delete the to-do item */}
-              <button className="btn btn-danger">Delete</button>
+              <button onClick={() => deleteTodo(todo.id)} className="btn btn-danger">Delete</button>
             </li>
           );
         })}

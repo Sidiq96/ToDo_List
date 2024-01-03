@@ -1,17 +1,29 @@
 // Importing the 'useState' hook from React to manage state in functional components
 import { useState } from "react";
-
-// Importing the external stylesheet for styling
 import "./styles.css";
+import { useEffect } from "react";
 
-// Defining the main functional component named 'App'
 export default function App() {
   // State hook to manage the input value for a new to-do item
   const [newItem, setNewItem] = useState("");
 
-  // State hook to manage the list of to-do items
   const [todos, setTodos] = useState([]);
 
+  useEffect(() => {
+    // retrieving todos from local storage
+    const storedTodos = localStorage.getItem("todos");
+    if (storedTodos) {
+      const parsedItems = JSON.parse(storedTodos);
+      setTodos(parsedItems);
+    } else {
+      setTodos([]); // Set an empty array as the initial value
+    }
+  }, []);
+
+  useEffect(() => {
+    // storing todos in local storage
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
   // Function to handle form submission and add a new to-do item to the list
   function handleSubmit(e) {
     e.preventDefault();
@@ -91,7 +103,12 @@ export default function App() {
                 {todo.title}
               </label>
               {/* Button to delete the to-do item */}
-              <button onClick={() => deleteTodo(todo.id)} className="btn btn-danger">Delete</button>
+              <button
+                onClick={() => deleteTodo(todo.id)}
+                className="btn btn-danger"
+              >
+                Delete
+              </button>
             </li>
           );
         })}
